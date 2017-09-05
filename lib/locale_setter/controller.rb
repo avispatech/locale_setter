@@ -1,7 +1,7 @@
 module LocaleSetter
   module Controller
     def self.included(controller)
-      controller.before_filter :set_locale
+      controller.before_action :set_locale
     end
 
     def default_url_options(options = {})
