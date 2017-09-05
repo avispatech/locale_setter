@@ -5,12 +5,21 @@ module LocaleSetter
                                          :user   => nil,
                                          :domain => nil,
                                          :env    => nil})
+      
+      order = [:params, :user, :domain, :http]
+      
+      order.each do |meth|
+        res = self.send("from_#{meth}".to_sym, options[meth], available(i18n))
+        break if res
+      end
+      
+      i18n.locale = res || i18n.default_locale
 
-      i18n.locale = from_params(options[:params], available(i18n)) ||
-                    from_user(options[:user], available(i18n))     ||
-                    from_domain(options[:domain], available(i18n)) ||
-                    from_http(options[:env], available(i18n))      ||
-                    i18n.default_locale
+#       i18n.locale = from_params(options[:params], available(i18n)) ||
+#                     from_user(options[:user], available(i18n))     ||        
+#                     from_http(options[:env], available(i18n))      ||
+#                     from_domain(options[:domain], available(i18n)) ||
+#                     i18n.default_locale
     end
 
     def self.available(i18n)
