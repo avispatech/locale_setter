@@ -13,7 +13,6 @@ module LocaleSetter
     end
 
     def set_locale
-      puts request.env
       Generic.set_locale(
         i18n,
         {:params => params,
