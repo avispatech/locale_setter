@@ -4,13 +4,16 @@ module LocaleSetter
     def self.set_locale(i18n, options = {:params => nil,
                                          :user   => nil,
                                          :domain => nil,
-                                         :env    => nil})
-
-      i18n.locale = from_params(options[:params], available(i18n)) ||
-                    from_user(options[:user], available(i18n))     ||
-                    from_domain(options[:domain], available(i18n)) ||
-                    from_http(options[:env], available(i18n))      ||
-                    i18n.default_locale
+                                         :http   => nil})
+      order = options.keys
+      
+      res = nil
+      order.each do |meth|
+        r = self.send("from_#{meth}".to_sym, options[meth], available(i18n))
+        res = r and break if r.present?
+      end
+      
+      i18n.locale = res || i18n.default_locale
     end
 
     def self.available(i18n)
@@ -22,8 +25,8 @@ module LocaleSetter
     end
 
     def self.from_http(env, available)
-      if env && env[HTTP_HEADER]
-        LocaleSetter::HTTP.for(env[HTTP_HEADER], available)
+      if env && env["HTTP_ACCEPT_LANGUAGE"]
+        LocaleSetter::HTTP.for(env["HTTP_ACCEPT_LANGUAGE"], available)
       end
     end
 

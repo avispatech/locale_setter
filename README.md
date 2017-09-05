@@ -40,11 +40,13 @@ i18n    = I18n
 
 # Set the .locale of I18n
 LocaleSetter::Generic.set_locale(i18n,
-                                {:env => request,
-                                 :params => params,
-                                 :user => user,
-                                 :domain => domain})
-```
+                                {
+                                  params: params,
+                                  user: user,
+                                  domain: request.host,
+                                  http:   request.env,
+                                  order: [:params, :user, :domain, :http]})
+                                
 
 The `i18n.locale=` will be called with the local selected from the passed data. `:env`, `:params`, `:domain` and `:user` are all optional.
 
