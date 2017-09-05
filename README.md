@@ -46,7 +46,8 @@ LocaleSetter::Generic.set_locale(i18n,
                                   domain: request.host,
                                   http:   request.env,
                                   order: [:params, :user, :domain, :http]})
-                                
+                              
+```
 
 The `i18n.locale=` will be called with the local selected from the passed data. `:env`, `:params`, `:domain` and `:user` are all optional.
 
@@ -59,6 +60,8 @@ One of the challenges with internationalization is knowing which locale a user a
 3. Domain Specific
 4. HTTP Headers
 5. Default
+
+This order can be switched by setting the :order parameter in the configuration
 
 ### Configuration
 
